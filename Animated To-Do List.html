@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ToDoListApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated To-Do List</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        .task-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            transition: transform 0.3s ease-in-out;
+        }
+        .task-item.ng-enter {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        .task-item.ng-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .task-item.ng-leave {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .task-item.ng-leave-active {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('ToDoListApp', [])
+            .controller('ToDoListController', function($scope) {
+                $scope.tasks = [];
+
+                $scope.addTask = function() {
+                    if ($scope.newTask) {
+                        $scope.tasks.push({ name: $scope.newTask });
+                        $scope.newTask = '';
+                    }
+                };
+
+                $scope.deleteTask = function(index) {
+                    $scope.tasks.splice(index, 1);
+                };
+            });
+    </script>
+</head>
+<body ng-controller="ToDoListController">
+    <div class="container">
+        <h2>To-Do List</h2>
+        <input type="text" placeholder="Add a new task" ng-model="newTask" ng-keypress="$event.keyCode === 13 && addTask()">
+        <button ng-click="addTask()">Add Task</button>
+
+        <div class="task-item" ng-repeat="task in tasks track by $index" ng-click="deleteTask($index)" ng-bind="task.name"></div>
+    </div>
+</body>
+</html>
